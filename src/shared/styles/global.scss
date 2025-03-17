@@ -1,0 +1,63 @@
+@use "normalize.css";
+@use "./shared/fonts.scss";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family: "Poppins", "Montserrat";
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+a {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Poppins", "Montserrat";
+  background: rgb(var(--base-color));
+  overflow-x: hidden !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 10px 10px 10px 1000px rgb(var(--base-color)) inset;
+  -webkit-text-fill-color: rgb(var(--primary-color)) !important;
+  -webkit-background-clip: text;
+  -webkit-font-feature-settings: off;
+}
+* {
+  &:-webkit-autofill::first-line,
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    font-family: "Poppins", "Montserrat" !important;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  border-radius: 100%;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--ui-light));
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--accent-color));
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
