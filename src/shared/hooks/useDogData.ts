@@ -11,20 +11,18 @@ const TOTAL_FROM = 10000;
 const PAGE_TOTAL = 20;
 
 export const useDogData = () => {
-  const { selectedBreeds, radius, ageRange, sortBy, zipCode, from } =
+  const { selectedBreeds, radius, ageRange, sortBy, location, from } =
     useSelector(selectFilters);
 
-  // **Fetch dog IDs based on filters**
   const {
     data: dogIds,
     isFetching,
     isLoading,
   } = useSearchDogsQuery({
     breeds: selectedBreeds.length > 0 ? selectedBreeds : undefined,
-    // zipCodes: zipCode ? [zipCode] : undefined,
     ageMin: ageRange[0],
     ageMax: ageRange[1],
-    size: 50, // Fetch 50 dogs per request
+    size: PAGE_TOTAL,
     from: from
       ? from < TOTAL_FROM
         ? from?.toString()
@@ -43,7 +41,6 @@ export const useDogData = () => {
   const [fetchDogs] = useFetchDogsMutation();
   const [dogs, setDogs] = useState<DogInfoObj[]>([]);
 
-  // Fetch full dog details when dog IDs are available
   useEffect(() => {
     const fetchDogDetails = async () => {
       if (!dogIds?.resultIds.length) {

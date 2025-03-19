@@ -20,21 +20,21 @@ import s from "./Filters.module.scss";
 import { useBreedsQuery } from "../../store/api/dogApi";
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
-import ReactGoogleAutocomplete from "react-google-autocomplete";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setBreeds,
   setRadius,
   setAgeRange,
   setSortBy,
-  setZipCode,
   resetFilters,
+  setLocation,
 } from "../../store/slices/filtersSlice";
 import { selectFilters } from "../../store/assets/selectors";
 import TuneIcon from "@mui/icons-material/Tune";
 import CloseIcon from "@mui/icons-material/Close";
 import { useMediaQuery } from "react-responsive";
 import classNames from "classnames";
+import GoogleMaps from "./Autocomplete";
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -43,40 +43,49 @@ const DEFAULT_LOCATION = { lat: 37.7749, lng: -122.4194 };
 
 export function Filters() {
   const dispatch = useDispatch();
-  const { data: breeds } = useBreedsQuery();
+  const { data: breeds, isLoading } = useBreedsQuery();
   const isMobile = useMediaQuery({ maxWidth: "760px" });
   const [open, setOpen] = useState(false);
 
-  const { selectedBreeds, radius, ageRange, sortBy, zipCode } =
+  const { selectedBreeds, radius, ageRange, sortBy, location } =
     useSelector(selectFilters);
+
+  console.log(location);
 
   useEffect(() => {
     if (!window.google || !window.google.maps) {
-      console.error("Google Maps API not loaded yet.");
+      console.warn("Google Maps API is not loaded yet.");
       return;
     }
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const userLocation = new google.maps.LatLng(
-            position.coords.latitude,
-            position.coords.longitude
-          );
-          fetchZipCode(userLocation);
-        },
-        async () => {
-          console.warn(
-            "Geolocation permission denied. Using default location."
-          );
-          const fallbackLocation = new google.maps.LatLng(
-            DEFAULT_LOCATION.lat,
-            DEFAULT_LOCATION.lng
-          );
-          fetchZipCode(fallbackLocation);
-        }
-      );
-    }
-  }, [GOOGLE_MAPS_API_KEY]);
+
+    const determineLocation = () => {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const userLocation = new window.google.maps.LatLng(
+              position.coords.latitude,
+              position.coords.longitude
+            );
+            fetchZipCode(userLocation);
+          },
+          async () => {
+            console.warn(
+              "Geolocation permission denied. Using default location."
+            );
+            const fallbackLocation = new window.google.maps.LatLng(
+              DEFAULT_LOCATION.lat,
+              DEFAULT_LOCATION.lng
+            );
+            fetchZipCode(fallbackLocation);
+          }
+        );
+      }
+    };
+
+    determineLocation();
+  }, [GOOGLE_MAPS_API_KEY, isLoading]);
+
+  console.log(GOOGLE_MAPS_API_KEY);
 
   const fetchZipCode = async (loc: google.maps.LatLng) => {
     try {
@@ -86,15 +95,16 @@ export function Filters() {
       const data = await response.json();
 
       if (data.results.length > 0) {
-        const address = data.results.find((result: any) =>
-          result.types.includes("postal_code")
-        );
-        if (address) {
-          const zip =
-            address.formatted_address.match(/\d{5}/)?.[0] || "Unknown";
-          dispatch(setZipCode(zip));
+        const addressComponent = data.results
+          .flatMap((result: any) => result.address_components)
+          .find((component: any) => component.types.includes("postal_code"));
+
+        if (addressComponent) {
+          const zipCode = addressComponent.long_name;
+          console.log("Determined Zip Code:", zipCode);
+          dispatch(setLocation({ zipCode }));
         } else {
-          dispatch(setZipCode("Unknown ZIP"));
+          console.warn("No ZIP code found in the geolocation results.");
         }
       }
     } catch (error) {
@@ -145,24 +155,40 @@ export function Filters() {
           <PopupState variant="popover" popupId="location-popover">
             {(popupState) => (
               <div>
-                <Button size="small" {...bindTrigger(popupState)}>
-                  {zipCode || "Detecting..."}
+                <Button
+                  style={{ textTransform: "none" }}
+                  size="small"
+                  {...bindTrigger(popupState)}
+                >
+                  {location?.zipCode || "Select Location"}
                   <PlaceOutlinedIcon />
                 </Button>
                 <Popover
                   {...bindPopover(popupState)}
                   anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                   transformOrigin={{ vertical: "top", horizontal: "center" }}
+                  className={s.popover}
                 >
-                  <ReactGoogleAutocomplete
-                    apiKey={GOOGLE_MAPS_API_KEY}
-                    onPlaceSelected={(place) => {
-                      const zip = place?.address_components?.find((comp: any) =>
-                        comp.types.includes("postal_code")
-                      )?.long_name;
-                      if (zip) dispatch(setZipCode(zip));
-                    }}
-                  />
+                  {/* <APIProvider apiKey={GOOGLE_MAPS_API_KEY}>
+                    <Map
+                      defaultCenter={position}
+                      defaultZoom={10}
+                      mapId="DEMO_MAP_ID"
+                      style={{ width: "300px", height: "300px" }}
+                    >
+                      <AdvancedMarker position={position} />
+                      <CustomMapControl
+                        controlPosition={ControlPosition.TOP}
+                        selectedAutocompleteMode={{
+                          id: "classic",
+                          label: "",
+                        }}
+                        onPlaceSelect={setSelectedPlace}
+                      />
+                      <MapHandler place={selectedPlace} />
+                    </Map>
+                  </APIProvider> */}
+                  <GoogleMaps />
                 </Popover>
               </div>
             )}
