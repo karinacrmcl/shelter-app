@@ -1,21 +1,17 @@
-import * as React from "react";
+import React, { useEffect, useId, useLayoutEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setLocation } from "../../store/slices/filtersSlice"; // Ensure the path is correct
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Paper, { PaperProps } from "@mui/material/Paper";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import Grid2 from "@mui/material/Grid2";
-import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
-import parse from "autosuggest-highlight/parse";
-import throttle from "lodash/throttle";
+import { throttle } from "lodash";
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 const useEnhancedEffect =
-  typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 function loadScript(src: string, position: HTMLElement) {
   const script = document.createElement("script");
@@ -114,12 +110,11 @@ let sessionToken: any;
 
 export default function GoogleMaps() {
   const dispatch = useDispatch();
-  const [value, setValue] = React.useState<PlaceType | null>(null);
-  const [inputValue, setInputValue] = React.useState("");
-  const [options, setOptions] =
-    React.useState<readonly PlaceType[]>(emptyOptions);
-  const callbackId = React.useId().replace(/:/g, "");
-  const [loaded, setLoaded] = React.useState(false);
+  const [value, setValue] = useState<PlaceType | null>(null);
+  const [inputValue, setInputValue] = useState("");
+  const [options, setOptions] = useState<readonly PlaceType[]>(emptyOptions);
+  const callbackId = useId().replace(/:/g, "");
+  const [loaded, setLoaded] = useState(false);
 
   if (typeof window !== "undefined") {
     if (!document.querySelector("#google-maps")) {

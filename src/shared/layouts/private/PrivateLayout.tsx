@@ -10,8 +10,6 @@ export function PrivateLayout({
   const navigate = useNavigate();
   const isLoggedIn = useSelector(selectCurrentUser);
 
-  console.log(isLoggedIn);
-
   useEffect(() => {
     if (!isLoggedIn) {
       navigate(Path.AUTH);

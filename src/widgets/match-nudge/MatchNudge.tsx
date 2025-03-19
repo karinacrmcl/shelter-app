@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Modal, Typography } from "@mui/material";
+import { Button, Modal, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../store/assets/hooks";
 import { selectFavourites } from "../../store/assets/selectors";

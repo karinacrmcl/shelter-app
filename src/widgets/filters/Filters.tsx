@@ -50,8 +50,6 @@ export function Filters() {
   const { selectedBreeds, radius, ageRange, sortBy, location } =
     useSelector(selectFilters);
 
-  console.log(location);
-
   useEffect(() => {
     if (!window.google || !window.google.maps) {
       console.warn("Google Maps API is not loaded yet.");
@@ -84,8 +82,6 @@ export function Filters() {
 
     determineLocation();
   }, [GOOGLE_MAPS_API_KEY, isLoading]);
-
-  console.log(GOOGLE_MAPS_API_KEY);
 
   const fetchZipCode = async (loc: google.maps.LatLng) => {
     try {
@@ -129,7 +125,6 @@ export function Filters() {
         title="Filters"
         className={classNames(s.container, { [s.open]: open })}
       >
-        {/* Sorting */}
         <FormControl fullWidth>
           <InputLabel id="sort-select-label">Sort by</InputLabel>
           <Select
@@ -148,7 +143,6 @@ export function Filters() {
           </Select>
         </FormControl>
 
-        {/* Location Selection */}
         <div className={s.location_header}>
           <h4>Location</h4>
 
@@ -169,25 +163,6 @@ export function Filters() {
                   transformOrigin={{ vertical: "top", horizontal: "center" }}
                   className={s.popover}
                 >
-                  {/* <APIProvider apiKey={GOOGLE_MAPS_API_KEY}>
-                    <Map
-                      defaultCenter={position}
-                      defaultZoom={10}
-                      mapId="DEMO_MAP_ID"
-                      style={{ width: "300px", height: "300px" }}
-                    >
-                      <AdvancedMarker position={position} />
-                      <CustomMapControl
-                        controlPosition={ControlPosition.TOP}
-                        selectedAutocompleteMode={{
-                          id: "classic",
-                          label: "",
-                        }}
-                        onPlaceSelect={setSelectedPlace}
-                      />
-                      <MapHandler place={selectedPlace} />
-                    </Map>
-                  </APIProvider> */}
                   <GoogleMaps />
                 </Popover>
               </div>
@@ -195,7 +170,6 @@ export function Filters() {
           </PopupState>
         </div>
 
-        {/* Distance Filter */}
         <div>
           <Slider
             aria-label="Miles"
@@ -230,7 +204,6 @@ export function Filters() {
             max={40}
           />
         </div>
-        {/* Breed Selection */}
         <List dense component="div" role="list" title="Filter by Breed">
           <h4>Breeds</h4>
           {breeds?.map((value: string) => {
@@ -266,7 +239,6 @@ export function Filters() {
           })}
         </List>
 
-        {/* Reset Filters Button */}
         <Button
           variant="outlined"
           color="secondary"
