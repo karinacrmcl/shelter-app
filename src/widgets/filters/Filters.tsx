@@ -50,63 +50,65 @@ export function Filters() {
   const { selectedBreeds, radius, ageRange, sortBy, location } =
     useSelector(selectFilters);
 
-  useEffect(() => {
-    if (!window.google || !window.google.maps) {
-      console.warn("Google Maps API is not loaded yet.");
-      return;
-    }
+  // useEffect(() => {
+  //   if (!window.google || !window.google.maps) {
+  //     console.warn("Google Maps API is not loaded yet.");
+  //     return;
+  //   }
 
-    const determineLocation = () => {
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            const userLocation = new window.google.maps.LatLng(
-              position.coords.latitude,
-              position.coords.longitude
-            );
-            fetchZipCode(userLocation);
-          },
-          async () => {
-            console.warn(
-              "Geolocation permission denied. Using default location."
-            );
-            const fallbackLocation = new window.google.maps.LatLng(
-              DEFAULT_LOCATION.lat,
-              DEFAULT_LOCATION.lng
-            );
-            fetchZipCode(fallbackLocation);
-          }
-        );
-      }
-    };
+  //   const determineLocation = () => {
+  //     if ("geolocation" in navigator) {
+  //       navigator.geolocation.getCurrentPosition(
+  //         async (position) => {
+  //           const userLocation = new window.google.maps.LatLng(
+  //             position.coords.latitude,
+  //             position.coords.longitude
+  //           );
+  //           fetchZipCode(userLocation);
+  //         },
+  //         async () => {
+  //           console.warn(
+  //             "Geolocation permission denied. Using default location."
+  //           );
+  //           const fallbackLocation = new window.google.maps.LatLng(
+  //             DEFAULT_LOCATION.lat,
+  //             DEFAULT_LOCATION.lng
+  //           );
+  //           fetchZipCode(fallbackLocation);
+  //         }
+  //       );
+  //     }
+  //   };
 
-    determineLocation();
-  }, [GOOGLE_MAPS_API_KEY, isLoading]);
+  //   determineLocation();
+  // }, [GOOGLE_MAPS_API_KEY, isLoading]);
 
-  const fetchZipCode = async (loc: google.maps.LatLng) => {
-    try {
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${loc.lat()},${loc.lng()}&key=${GOOGLE_MAPS_API_KEY}`
-      );
-      const data = await response.json();
+  console.log(location, radius);
 
-      if (data.results.length > 0) {
-        const addressComponent = data.results
-          .flatMap((result: any) => result.address_components)
-          .find((component: any) => component.types.includes("postal_code"));
+  // const fetchZipCode = async (loc: google.maps.LatLng) => {
+  //   try {
+  //     const response = await fetch(
+  //       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${loc.lat()},${loc.lng()}&key=${GOOGLE_MAPS_API_KEY}`
+  //     );
+  //     const data = await response.json();
 
-        if (addressComponent) {
-          const zipCode = addressComponent.long_name;
-          console.log("Determined Zip Code:", zipCode);
-          dispatch(setLocation({ zipCode }));
-        } else {
-          console.warn("No ZIP code found in the geolocation results.");
-        }
-      }
-    } catch (error) {
-      console.error("Geocoding error:", error);
-    }
-  };
+  //     if (data.results.length > 0) {
+  //       const addressComponent = data.results
+  //         .flatMap((result: any) => result.address_components)
+  //         .find((component: any) => component.types.includes("postal_code"));
+
+  //       if (addressComponent) {
+  //         const zipCode = addressComponent.long_name;
+  //         console.log("Determined Zip Code:", zipCode);
+  //         dispatch(setLocation({ zipCode }));
+  //       } else {
+  //         console.warn("No ZIP code found in the geolocation results.");
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Geocoding error:", error);
+  //   }
+  // };
 
   return (
     <>

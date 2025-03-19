@@ -4,8 +4,10 @@ import {
   useFetchDogsMutation,
   useSearchDogsQuery,
 } from "../../store/api/dogApi";
+import { useSearchLocationsMutation } from "../../store/api/locationsApi";
 import { selectFilters } from "../../store/assets/selectors";
 import { DogInfoObj } from "../types/CardObj";
+import { getBoundingBox } from "../utils/mapsUtils";
 
 const TOTAL_FROM = 10000;
 const PAGE_TOTAL = 20;
@@ -13,6 +15,33 @@ const PAGE_TOTAL = 20;
 export const useDogData = () => {
   const { selectedBreeds, radius, ageRange, sortBy, location, from } =
     useSelector(selectFilters);
+  const [searchLocations] = useSearchLocationsMutation();
+
+  const [nearbyZipCodes, setNearbyZipCodes] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (location?.coordinates && radius) {
+      const geoBoundingBox = getBoundingBox(
+        location.coordinates.lat,
+        location.coordinates.lon,
+        radius
+      );
+
+      searchLocations({ geoBoundingBox })
+        .unwrap()
+        .then((data) => {
+          setNearbyZipCodes([
+            ...data.results.map((loc) => loc.zip_code),
+            location?.zipCode,
+          ]);
+        })
+        .catch((error) =>
+          console.error("Error fetching nearby locations:", error)
+        );
+    }
+  }, [location, radius, searchLocations]);
+
+  console.log(nearbyZipCodes);
 
   const {
     data: dogIds,
@@ -23,6 +52,10 @@ export const useDogData = () => {
     ageMin: ageRange[0],
     ageMax: ageRange[1],
     size: PAGE_TOTAL,
+    zipCodes:
+      location?.zipCode && nearbyZipCodes.length > 0
+        ? nearbyZipCodes
+        : undefined,
     from: from
       ? from < TOTAL_FROM
         ? from?.toString()
@@ -57,7 +90,7 @@ export const useDogData = () => {
     };
 
     fetchDogDetails();
-  }, [dogIds, fetchDogs]);
+  }, [dogIds, fetchDogs, radius]);
 
   return { dogs, isFetching: isFetching || isLoading, total: dogIds?.total };
 };

@@ -20,3 +20,17 @@ export const getAddressFromZip = async (
     return null;
   }
 };
+
+const EARTH_RADIUS_MILES = 3958.8; // Earth radius in miles
+
+export const getBoundingBox = (lat: number, lon: number, radius: number) => {
+  const latChange = (radius / EARTH_RADIUS_MILES) * (180 / Math.PI);
+  const lonChange = latChange / Math.cos((lat * Math.PI) / 180);
+
+  return {
+    top: lat + latChange,
+    bottom: lat - latChange,
+    left: lon - lonChange,
+    right: lon + lonChange,
+  };
+};
