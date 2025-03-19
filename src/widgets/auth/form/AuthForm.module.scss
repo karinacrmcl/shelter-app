@@ -1,0 +1,28 @@
+.container {
+  min-width: 420px;
+
+  display: flex;
+  flex-direction: column;
+  grid-gap: 18px;
+
+  background: white;
+  padding: 36px 24px;
+
+  border-radius: 20px;
+  margin: auto auto;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.08);
+
+  & h3 {
+    font-size: 22px;
+  }
+
+  & button {
+    background-color: var(--accent-color);
+    height: 45px;
+    text-transform: capitalize;
+  }
+
+  @media (max-width: 760px) {
+    min-width: 95%;
+  }
+}

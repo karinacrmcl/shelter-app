@@ -1,7 +1,16 @@
 import React from "react";
+import { useDogData } from "../../shared/hooks/useDogData";
+import { Filters } from "../../widgets/filters/Filters";
+import List from "../../widgets/list/List";
+import s from "./List.module.scss";
 
-type Props = {};
+export default function Browse() {
+  const { dogs, isFetching, total } = useDogData();
 
-export default function List({}: Props) {
-  return <div>List</div>;
+  return (
+    <div className={s.container}>
+      <Filters />
+      <List items={dogs} isFetching={isFetching} total={total} />
+    </div>
+  );
 }

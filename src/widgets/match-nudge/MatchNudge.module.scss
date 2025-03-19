@@ -1,0 +1,145 @@
+.container {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  grid-gap: 12px;
+
+  background: white;
+
+  @media (max-width: 760px) {
+    flex-direction: column;
+  }
+
+  & img {
+    width: 80px;
+    border-radius: 10px;
+  }
+
+  & p {
+    margin: 0;
+    padding: 0;
+
+    @media (max-width: 760px) {
+      text-align: center !important;
+    }
+  }
+
+  & h3 {
+    font-size: 20px;
+    @media (max-width: 760px) {
+      text-align: center !important;
+    }
+  }
+
+  & p {
+    font-size: 14px;
+  }
+
+  & button {
+    width: fit-content;
+    margin-left: auto;
+    text-transform: none;
+    font-size: 16px;
+
+    background: var(--accent-color);
+    white-space: nowrap;
+
+    @media (max-width: 760px) {
+      margin: 0 auto;
+    }
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 6px;
+}
+
+.modal {
+  display: flex;
+  align-items: center;
+
+  background: white;
+  width: 70%;
+
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+
+  position: absolute;
+
+  padding: 26px;
+  border-radius: 15px;
+
+  @media (max-width: 760px) {
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    transform: none;
+    border-radius: 0;
+
+    position: fixed;
+    z-index: 100;
+
+    flex-direction: column;
+    padding-top: 45px;
+  }
+
+  &_text {
+    max-width: 80%;
+
+    @media (max-width: 760px) {
+      max-width: 100%;
+    }
+  }
+  &_content {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 8px;
+    order: 0;
+
+    @media (max-width: 760px) {
+      order: 2;
+
+      margin-top: 10px;
+    }
+  }
+
+  & img {
+    width: 240px;
+    height: 240px;
+
+    object-fit: cover;
+    border-radius: 12px;
+
+    order: 2;
+
+    @media (max-width: 760px) {
+      width: 100%;
+
+      order: 0;
+    }
+  }
+}
+
+.close_btn {
+  display: none;
+
+  @media (max-width: 760px) {
+    display: block;
+
+    position: absolute !important;
+    top: 10px;
+    right: 10px;
+    border: none !important;
+
+    width: 30px;
+    height: 30px;
+  }
+}

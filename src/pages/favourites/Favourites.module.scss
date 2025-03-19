@@ -1,0 +1,12 @@
+.container {
+  width: 100%;
+  height: calc(100vh - 140px);
+
+  display: flex;
+  flex-direction: column;
+  grid-gap: 24px;
+
+  @media (max-width: 760px) {
+    height: 100%;
+  }
+}

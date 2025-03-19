@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  align-items: center;
+  grid-gap: 8px;
+
+  & svg {
+    width: 30px;
+    height: 30px;
+
+    & path {
+      fill: var(--accent-color);
+    }
+  }
+
+  color: var(--accent-color);
+  font-size: 18px;
+  font-weight: 600;
+}
