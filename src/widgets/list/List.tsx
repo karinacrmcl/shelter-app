@@ -18,14 +18,16 @@ import { selectFavourites } from "../../store/assets/selectors";
 import { setFrom } from "../../store/slices/filtersSlice";
 import { useMediaQuery } from "react-responsive";
 import SearchOffIcon from "@mui/icons-material/SearchOff";
+import classNames from "classnames";
 
 type Props = {
   items: DogInfoObj[];
   isFetching?: boolean;
   total?: number;
+  className?: string;
 };
 
-export default function List({ items, total, isFetching }: Props) {
+export default function List({ items, total, isFetching, className }: Props) {
   const totalPages = Math.ceil((total || 0) / 20); // 20 dogs per page
   const [updateDogFav] = useFetchDogsMutation();
   const dispatch = useDispatch();
@@ -62,7 +64,7 @@ export default function List({ items, total, isFetching }: Props) {
 
   return (
     <div className={s.wrapper}>
-      <div className={s.container}>
+      <div className={classNames(s.container, className)}>
         {isFetching && <BrowseSkeleton />}
         {!isFetching &&
           items?.map((item) => {

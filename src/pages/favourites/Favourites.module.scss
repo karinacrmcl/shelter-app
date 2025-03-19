@@ -10,3 +10,13 @@
     height: 100%;
   }
 }
+
+.list {
+  height: calc(100vh - 270px);
+
+  padding-bottom: 10px;
+
+  @media (max-width: 760px) {
+    height: 100%;
+  }
+}

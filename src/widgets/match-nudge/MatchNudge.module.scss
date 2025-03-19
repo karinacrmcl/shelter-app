@@ -129,10 +129,10 @@
 }
 
 .close_btn {
-  display: none;
+  display: none !important;
 
   @media (max-width: 760px) {
-    display: block;
+    display: flex !important;
 
     position: absolute !important;
     top: 10px;

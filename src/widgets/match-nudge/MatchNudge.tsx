@@ -9,6 +9,7 @@ import { useMatchDogMutation } from "../../store/api/dogApi";
 import { DogInfoObj } from "../../shared/types/CardObj";
 import { getAddressFromZip } from "../../shared/utils/mapsUtils";
 import CloseIcon from "@mui/icons-material/Close";
+import { useMediaQuery } from "react-responsive";
 
 export default function MatchNudge() {
   const { favouriteDogIds, favouriteDogs } = useAppSelector(selectFavourites);
@@ -16,6 +17,7 @@ export default function MatchNudge() {
   const [open, setOpen] = useState(false);
   const [dog, setDog] = useState<DogInfoObj | undefined>(undefined);
   const [address, setAddress] = useState<string | null>(null);
+  const isMobile = useMediaQuery({ maxWidth: "760px" });
 
   const handleOpen = () => {
     setOpen(true);
@@ -26,6 +28,8 @@ export default function MatchNudge() {
   };
 
   useEffect(() => {
+    if (!isMobile) return;
+
     if (open) {
       document.body.style.overflow = "hidden";
     } else {

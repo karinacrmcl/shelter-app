@@ -13,6 +13,7 @@ export default function Favourites() {
       <MatchNudge />
       <List
         items={favouriteDogs?.filter((d) => favouriteDogIds.includes(d.id))}
+        className={s.list}
       />
     </div>
   );
