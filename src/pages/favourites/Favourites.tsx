@@ -1,4 +1,3 @@
-import React from "react";
 import { useAppSelector } from "../../store/assets/hooks";
 import { selectFavourites } from "../../store/assets/selectors";
 import List from "../../widgets/list/List";

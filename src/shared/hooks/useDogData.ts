@@ -41,8 +41,6 @@ export const useDogData = () => {
     }
   }, [location, radius, searchLocations]);
 
-  console.log(nearbyZipCodes);
-
   const {
     data: dogIds,
     isFetching,

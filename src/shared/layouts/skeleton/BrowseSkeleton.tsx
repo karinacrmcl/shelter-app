@@ -1,4 +1,3 @@
-import React from "react";
 import { Skeleton, Grid, Box } from "@mui/material";
 
 export default function BrowseSkeleton() {

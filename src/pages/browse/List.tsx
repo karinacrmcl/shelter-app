@@ -1,4 +1,3 @@
-import React from "react";
 import { useDogData } from "../../shared/hooks/useDogData";
 import { Filters } from "../../widgets/filters/Filters";
 import List from "../../widgets/list/List";

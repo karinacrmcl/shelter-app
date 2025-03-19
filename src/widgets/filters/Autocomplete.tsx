@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useLayoutEffect, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setLocation } from "../../store/slices/filtersSlice"; // Ensure the path is correct
 import Box from "@mui/material/Box";

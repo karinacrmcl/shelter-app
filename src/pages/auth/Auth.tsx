@@ -1,4 +1,3 @@
-import React from "react";
 import AuthForm from "../../widgets/auth/form/AuthForm";
 import s from "./Auth.module.scss";
 
